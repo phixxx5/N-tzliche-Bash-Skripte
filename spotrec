@@ -1,0 +1,73 @@
+#!/bin/bash
+
+#Skript zur automatischen Aufnahme Songs in MP3-Dateien wobei Werbung nicht aufgezeichnet wird
+
+if ! qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata|grep "xesam"
+	then
+	echo "Error: Spotify gestartet?"
+	exit 1
+fi
+songZahl=$1
+#Eingabe als Songzahl
+for (( count = 0 ; count < songZahl ; count++))
+do
+#Ausgabe durchzählen
+	echo Nummer $count
+
+#solange Werbung -> warten
+	if qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata |grep "spotify:ad"
+	then 
+		qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Play
+		while qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata |grep "spotify:ad"
+			do
+			sleep 2
+		done
+	#Zu Anfang vom Lied zurück
+	sleep 6
+	qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause
+	qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous
+	fi
+#keine Werbung -> Titel, Album... Auslesen
+	title=`qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep "xesam:title:" | cut -c14-`
+	name=$title
+	artist=`qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep "xesam:artist:" | cut -c15-`
+	album=`qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep "xesam:album:" | cut -c14-`
+	longLength=`qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep "mpris:length" | cut -c15-`
+	trackNumber=`qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep "xesam:trackNumber:" | cut -c20-`
+	length=`expr $longLength \/ 1000000`
+	
+#Keine / im Dateinamen erlaubt deshalb ersetzendurch \
+	if echo $name | grep "/"
+	then
+		name="${name/"/"/'_'}"
+	fi
+#Wenn Name schon vergeben ändere Name
+	k=1
+	while find /home/philip/Music/"$name".mp3
+	do
+		name="$name""$k"
+		k=`expr $k + 1`
+	done
+#Song-Daten ausgeben
+	echo "$name".mp3
+	echo $title
+	echo $artist
+	echo $album
+	echo $length
+	echo $trackNumber
+	
+#Zu Anfang vom Lied zurück
+	qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Play
+	sleep 6
+	qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause
+	qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous
+
+#Lautstärke auf 50%
+	amixer -D pulse sset Master 50%
+#Musik abspielen und Aufnahme starten
+	qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Play
+	arecord -D pulse -d $length -f cd | lame -b 160 - /home/philip/Music/"$name".mp3 --tt "$title" --ta "$artist" --tl "$album"  --tn $trackNumber
+	qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause
+done
+echo Erfolg!
+exit 

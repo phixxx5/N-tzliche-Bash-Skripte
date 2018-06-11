@@ -1,0 +1,4 @@
+#!/bin/bash
+datum=`date +%d_%m_%y`
+mkdir /media/philip/ZIMMULGA_2/linux_backup_$datum
+find /home/philip -user philip | cp -r -u -v /home/philip /media/philip/ZIMMULGA_2/linux_backup_$datum/

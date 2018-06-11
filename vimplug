@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#Zum Beispiel www.github..........
+plugAdr=$1
+#wählt den letzten Teil der Adresse als Name für das Plugin
+name=`basename $plugAdr` 
+git clone "$plugAdr" ~/.vim/"$name"
+#Pfad zu VIM Runtimepath hinzufügen und zu .vimrc adden
+echo "set runtimepath+=~/.vim/$name" > ~/tmp_runtimepath
+cat ~/.vimrc >> ~/tmp_runtimepath
+cat ~/tmp_runtimepath > .vimrc

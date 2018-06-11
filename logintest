@@ -1,0 +1,6 @@
+#!/bin/bash
+date
+who
+ich=`whoami`
+echo "Hallo $ich, wie geht es dir?"
+exit 0

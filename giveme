@@ -1,0 +1,48 @@
+#!/bin/bash
+#willkommen
+
+# erweiterter Dialog
+
+if ! zenity --info --height=200 --width=250 --title "Willkommen" --text "Hallo Philip!           \nFortfahren?"; 
+	then exit;
+fi
+
+if ! FUNKTION=$(zenity --list --height=400 --width=350 --checklist --title="Funktionen" --title="Wähle Funktionen" \
+--column="choice" \
+--column="functions" \
+TRUE "spotify" \
+TRUE "firefox" \
+TRUE "thunderbird" \
+FALSE "telegram" \
+TRUE "slack" \
+FALSE "eclipse" \
+FALSE "arduino" \
+FALSE "arduTutorialPDF" ); 
+then
+  exit;
+fi
+
+#(
+#echo "25"; sleep 0.5
+#echo "50"; sleep 0.5
+#echo "75"; sleep 0.5
+#echo "100"
+#) | zenity --progress --text "Hack in Progress..." --title "Fortschritt" --percentage=0
+
+[[ $FUNKTION = *spotify* ]] && spotify &
+
+[[ $FUNKTION = *firefox* ]] && firefox &
+
+[[ $FUNKTION = *thunderbird* ]] && thunderbird &
+
+[[ $FUNKTION = *telegram* ]] && telegram &
+
+[[ $FUNKTION = *slack* ]] && slack &
+
+[[ $FUNKTION = *eclipse* ]] && eclipse &
+
+[[ $FUNKTION = *arduino* ]] && arduino &
+
+[[ $FUNKTION = *arduTutorialPDF* ]] && gnome-open ~/workspace/arduino-1.8.0/Deutsch/DAS_VOLLSTÄNDIGSTE_STARTER_KIT_TUTORIAL_FÜR_UNO.pdf &
+
+echo "Fertig"

@@ -1,0 +1,18 @@
+# Ein Script zum Script erstellen...
+# Name : Philip
+# Vezeichnis in dem sich das Script befindet
+dir=/home/philip/workspace/skripte
+# editor der verwendet werden soll
+editor=gedit
+
+# erstes Argument muss der Scriptname sein...
+[ -z "$1" ] && exit 1
+
+# Editor starten und Script laden (oder erzeugen)
+$editor $dir/$1
+
+# Ausführrechte für User setzen ...
+chmod u+x $dir/$1
+
+# Script gleich ausführen? Nein? Dann auskommentieren ...
+# $dir/$1

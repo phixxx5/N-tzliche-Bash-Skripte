@@ -1,0 +1,18 @@
+#!/bin/bash
+
+#Skript zum aufrufen der bass tabs für den song den spotify grade spielt
+
+if ! qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata|grep "xesam"
+	then
+	echo "Error: Spotify gestartet?"
+	exit 1
+fi
+
+title=`qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep "xesam:title:" | cut -c14-`
+
+artist=`qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep "xesam:artist:" | cut -c15-`
+
+#type=400 means show only bass tabs delete it for all tabs
+
+#chromium can be replaced by any browser
+chromium-browser "https://www.ultimate-guitar.com/search.php?search_type=title&type=400&value=$title $artist"

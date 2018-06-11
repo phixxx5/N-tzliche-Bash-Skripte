@@ -1,0 +1,5 @@
+#!/bin/bash
+#Skriptname finduser
+
+#gibt alle Dateien des Users you auf dem Bildschirm aus
+ find / -user philip -print 2>/dev/null
