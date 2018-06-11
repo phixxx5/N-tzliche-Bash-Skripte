@@ -1,1 +1,1 @@
-skripte
+# N-tzliche-Bash-Skripte
