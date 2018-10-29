@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#Skript zur automatischen Aufnahme Songs in MP3-Dateien wobei Werbung nicht aufgezeichnet wird
+#Skript zur automatischen Aufnahme von Songs in MP3-Dateien wobei Werbung nicht aufgezeichnet wird
 
-if ! qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata|grep "xesam"
+if ! qdbus org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep "xesam"
 	then
 	echo "Error: Spotify gestartet?"
 	exit 1
