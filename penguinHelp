@@ -1,7 +1,29 @@
 #!/bin/bash
-#Skript zum Kompilieren und ausführen aller Java Dateien in Unterordnern. .class Dateien werden wieder entfernt
 
-for d in $(find ./ -maxdepth 1 -type d)
-do
-  echo $d
-done >output_file
+#Skript zum Kompilieren und ausführen aller Java Dateien in Unterordnern.
+
+find . -maxdepth 1 -type d -print0 |
+  while IFS= read -rd '' dir; 
+  do
+    if [[ $dir == *"onlinetext"* || $dir == "." ]]; then
+      continue
+    fi
+    echo "$dir" | sed 's/_.*//'
+    cp -r "$dir" tmp
+    cd tmp
+    #for file in $(ls "$dir");
+    for file in $(ls);
+    do
+      if [[ $file == *".java" ]]; then
+        file $file;
+        javac $file;
+        class=${file%.*}
+        #echo "$class"
+        java "$class"
+        printf "\n\n"
+        cd ..
+        rm -r tmp
+      #exit 0
+      fi
+    done
+  done
