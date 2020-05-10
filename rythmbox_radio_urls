@@ -1197,6 +1197,18 @@ rhythmbox-client --play-uri=http://stream.freefm.de:8100/listen.pls
 sleep 1
 rhythmbox-client --play-uri=http://www.radiorecord.ru/radio/stations/?st=ps
 sleep 1
+rhythmbox-client --play-uri=http://stream.laut.fm/alles-chill
+sleep 1
+rhythmbox-client --play-uri=http://stream.laut.fm/alles-dance
+sleep 1
+rhythmbox-client --play-uri=http://stream.laut.fm/alles-hardstyle
+sleep 1
+rhythmbox-client --play-uri=http://stream.laut.fm/alles-klub
+sleep 1
+rhythmbox-client --play-uri=http://stream.laut.fm/alles-radio
+sleep 1
+rhythmbox-client --play-uri=http://stream.laut.fm/alles-techno
+sleep 1
 rhythmbox-client --play-uri=http://
 sleep 1
 
